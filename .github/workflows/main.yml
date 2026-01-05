@@ -1,4 +1,4 @@
-name: Build & Deploy Spring app
+name: Build & Deploy Spring Boot App
 
 on:
   push:
@@ -7,8 +7,8 @@ on:
 
 jobs:
   build-deploy:
-    name: Build and Deploy Spring Boot
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
@@ -19,13 +19,13 @@ jobs:
           distribution: 'corretto'
           java-version: 17
 
-      - name: Clean & Build (skip tests)
+      - name: Build Application
         run: mvn clean package -B -DskipTests --file pom.xml
 
-      - name: Check Docker Hub username
+      - name: Check Docker Hub secrets
         run: |
-          if [ -z "${{ secrets.DOCKER_HUB_USERNAME }}" ]; then
-            echo "Error: DOCKER_HUB_USERNAME secret is not set!"
+          if [ -z "${{ secrets.DOCKER_HUB_USERNAME }}" ] || [ -z "${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}" ]; then
+            echo "Error: Docker Hub secrets are not set!"
             exit 1
           fi
 
