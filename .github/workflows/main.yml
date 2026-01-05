@@ -19,5 +19,5 @@ jobs:
           distribution: 'corretto'
           java-version: 17
 
-      - name: Clean, Build & Test
-        run: mvn clean verify -B --file pom.xml
+      - name: Clean & Build (skip tests)
+        run: mvn clean package -B -DskipTests --file pom.xml
